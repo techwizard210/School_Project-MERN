@@ -262,7 +262,7 @@ class Tasks extends Component {
                                 <Label htmlFor="text-input">Task Title</Label>
                               </Col>
                               <Col xs="12" md="9">
-                                <Input type="email" id="task-input" name="email-input" placeholder="" autoComplete="email" value={this.state.user.tasktitle} onChange={this.onChangeTaskTitle} />
+                                <Input type="text" id="task-title" name="title-input" placeholder="" autoComplete="text" value={this.state.user.tasktitle} onChange={this.onChangeTaskTitle} />
                               </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -270,7 +270,7 @@ class Tasks extends Component {
                                 <Label htmlFor="text-input">Country</Label>
                               </Col>
                               <Col xs="12" md="9">
-                                <Input type="email" id="task-input" name="email-input" placeholder="" autoComplete="email" value={this.state.user.country} onChange={this.onChangeCountry} />
+                                <Input type="text" id="country-input" name="country-input" placeholder="" autoComplete="text" value={this.state.user.country} onChange={this.onChangeCountry} />
                               </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -278,7 +278,7 @@ class Tasks extends Component {
                                 <Label htmlFor="text-input">Level</Label>
                               </Col>
                               <Col xs="12" md="9">
-                                <Input type="email" id="task-input" name="email-input" placeholder="" autoComplete="email" value={this.state.user.level} onChange={this.onChangeLevel} />
+                                <Input type="text" id="level-input" name="level-input" placeholder="" autoComplete="text" value={this.state.user.level} onChange={this.onChangeLevel} />
                               </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -286,7 +286,7 @@ class Tasks extends Component {
                                 <Label htmlFor="text-input">Type</Label>
                               </Col>
                               <Col xs="12" md="9">
-                                <Input type="email" id="task-input" name="email-input" placeholder="" autoComplete="email" value={this.state.user.type} onChange={this.onChangeType} />
+                                <Input type="text" id="type-input" name="type-input" placeholder="" autoComplete="text" value={this.state.user.type} onChange={this.onChangeType} />
                               </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -294,7 +294,7 @@ class Tasks extends Component {
                                 <Label htmlFor="text-input">Budget</Label>
                               </Col>
                               <Col xs="12" md="9">
-                                <Input type="email" id="task-input" name="email-input" placeholder="" autoComplete="email" value={this.state.user.budget} onChange={this.onChangeBudget} />
+                                <Input type="text" id="budget-input" name="budget-input" placeholder="" autoComplete="text" value={this.state.user.budget} onChange={this.onChangeBudget} />
                               </Col>
                             </FormGroup>
                             <FormGroup row>
