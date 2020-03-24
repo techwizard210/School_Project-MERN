@@ -427,8 +427,14 @@ router.post('/addtask/',upload.array('imgCollection',6),(req, res, next) => {
     //     if (user) {
     //         return res.status(400).json({ email: "Email already exists"});
     //     } else {
+
+            const now = new Date();
+            const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July', 'Oug', 'Sep', 'Oct', 'Nov', 'Dec']
+            const date = month[now.getMonth()]+" "+now.getDate()+","+now.getFullYear(); 
+
+
             const newTask = new Task({
-                cilent: req.body.client,
+                client: req.body.client,
                 tasktitle: req.body.tasktitle,
                 country: req.body.country,
                 level: req.body.level,
@@ -438,6 +444,8 @@ router.post('/addtask/',upload.array('imgCollection',6),(req, res, next) => {
                 deadline: req.body.deadline,
                 description: req.body.description,
                 payment: req.body.payment,
+                date: date,
+                progress: 0
 
             });
 

@@ -425,9 +425,9 @@ class Tasks extends Component {
                           <td>
                             <div className="clearfix">
                               <div className="float-left">
-                                <strong>{item.progress}</strong>
+                                <strong>{item.progress}%</strong>
                               </div>
-                              <div className="float-left">
+                              <div className="float-right">
                                 <small className="text-muted">{item.date}- {new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit'}).format(today)}</small>
                               </div>
                             </div>
