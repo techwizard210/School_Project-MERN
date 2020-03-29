@@ -50,6 +50,9 @@ const TaskSchema = new Schema({
     date: {
         type: String,
         //default: Date.now
+    },
+    active: {
+        type: String,
     }
 });
 

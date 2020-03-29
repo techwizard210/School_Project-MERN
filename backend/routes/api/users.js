@@ -24,6 +24,19 @@ router.get("/task", (req, res) => {
         })
 })
 
+router.post('/updatetask/:id',(req, res, next) => {
+
+            Task.findByIdAndUpdate(req.params.id,{
+                $set:req.body
+            },(error,data)=> {
+                if(error){
+                    return res.status(400).json(error);
+               } else {
+                    res.json(data)
+                }
+           })
+})
+
 router.get("/messages", (req, res) => {
     Message.find()
         .then(messages => {
@@ -55,6 +68,7 @@ router.post("/register", (req,res) => {
                 email: req.body.email,
                 password: req.body.password,
                 role:req.body.role,
+                admin:"admin"
             });
 
             bcrypt.genSalt(10, (err, salt)=>{
@@ -90,7 +104,8 @@ router.post("/add", (req,res) => {
                 userid: req.body.userid,
                 email: req.body.email,
                 password: req.body.password,
-                role:req.body.role
+                role:req.body.role,
+                admin:"user"
             });
 
             bcrypt.genSalt(10, (err, salt)=>{
@@ -181,6 +196,31 @@ router.delete("/delete-user/:id", (req, res)=> {
             User.find()
                 .then(users => {
                     res.send(users);
+                })
+        }).catch(err=>{
+            if(err.kind === 'ObjectId' || err.name === 'UserFound'){
+                return res.status(404).send({
+                    message:"User not found with id"+req.params.users
+                })
+            }
+            return res.status(500).send({
+                message:"Could not delete user  with id"+req.params.id
+            })
+        })
+})
+
+router.delete("/delete-task/:id", (req, res)=> {
+    Task.findByIdAndRemove(req.params.id)
+        .then(task=>{
+            if (!task) {
+                return res.status(404).send({
+                    message:"User not found with id" + req.params.id
+                })
+            }
+            //res.send({message:"User deleted sucessfully"});
+            Task.find()
+                .then(tasks => {
+                    res.send(tasks);
                 })
         }).catch(err=>{
             if(err.kind === 'ObjectId' || err.name === 'UserFound'){
@@ -360,7 +400,7 @@ router.post('/upload-images/',upload.array('imgCollection',6),(req, res, next) =
                 email: req.body.email,
                 password: req.body.password,
                 imgurl: reqFiles,
-                role: req.body.role
+                role: req.body.role,                
             });
 
             bcrypt.genSalt(10, (err, salt)=>{
@@ -445,7 +485,8 @@ router.post('/addtask/',upload.array('imgCollection',6),(req, res, next) => {
                 description: req.body.description,
                 payment: req.body.payment,
                 date: date,
-                progress: 0
+                progress: 0,
+                active: "active"
 
             });
 
@@ -463,4 +504,5 @@ router.post('/addtask/',upload.array('imgCollection',6),(req, res, next) => {
     // });
     
 })
+
 module.exports = router;

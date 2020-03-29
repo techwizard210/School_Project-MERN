@@ -15,6 +15,10 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    admin: {
+        type: String,
+        required: true
+    },
 
     userid: {
         type: String,

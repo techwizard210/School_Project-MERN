@@ -37,7 +37,10 @@ class Tasks extends Component {
       client: '',
       file: null,
       imgCollection: null,
-      tasks: []
+      tasks: [],
+      alltasks: [],
+      updatetask: [],
+      alt: 0
     };
 
     this.toggle = this.toggle.bind(this);
@@ -52,7 +55,11 @@ class Tasks extends Component {
     this.onChangePayment = this.onChangePayment.bind(this);
     this.onFileChange = this.onFileChange.bind(this);
     this.addtask = this.addtask.bind(this);
-
+    this.search = this.search.bind(this);
+    this.onChangeProgress = this.onChangeProgress.bind(this);
+    this.onChangeActive = this.onChangeActive.bind(this);
+    this.updatesubmit = this.updatesubmit.bind(this);
+    this.delete = this.delete.bind(this);
   }
 
   onChangeClient(e) {
@@ -155,6 +162,22 @@ class Tasks extends Component {
     })
   }
 
+  onChangeActive(e) {
+    var user = this.state.user;
+    user.active = e.target.value;
+    this.setState({
+      user: user
+    })
+  }
+
+  onChangeProgress(e) {
+    var user = this.state.user;
+    user.progress = e.target.value;
+    this.setState({
+      user: user
+    })
+  }
+
 
   addtask(e) {
     e.preventDefault();
@@ -186,7 +209,12 @@ class Tasks extends Component {
   toggle() {
     this.setState({
       modal: !this.state.modal,
+      alt: 0
     });
+
+    this.setState({
+      user: []
+    })
   }
 
   componentDidMount() {
@@ -194,28 +222,92 @@ class Tasks extends Component {
       .then(res => {
         this.setState({
           tasks: res.data,
+          alltasks: res.data
         });
-        console.log(res.data)
       })
       .catch((error) => {
         console.log(error);
       })
   }
 
+  search(e) {
+    const searchName = e.target.value;
+    const alltasks = this.state.alltasks;
+    if (searchName == '') {
+      this.setState({
+        tasks: alltasks
+      })
+    } else {
+      var data = this.state.alltasks;
+      this.setState({
+        tasks: data.filter(task => (task.tasktitle.indexOf(searchName) > -1) || (task.client.indexOf(searchName) > -1)),
+      });
+    }
 
+  }
+
+  update(id) {
+    const data = this.state.alltasks;
+    const update = data.filter(task => (task._id == id))
+    this.setState({
+      user: update[0],
+    });
+
+    this.setState({
+      modal: !this.state.modal,
+      alt: 1
+    });
+
+  }
+
+  updatesubmit(e) {
+    e.preventDefault();
+    const task = this.state.user;
+    const id = task._id;
+    axios.post("/api/users/updatetask/" + id, task, {
+    }).then(res => {
+      window.location.href = "/tasks";
+
+    }).catch((error) => {
+      //alert('Please choose a file');
+    })
+  }
+
+  delete(id) {
+    const data = this.state.tasks;
+    this.setState({
+      tasks: data.filter(task => task._id !== id),
+    });
+    axios.delete('/api/users/delete-task/' + id)
+      .then((res) => {
+        console.log('User sucessfully deleted!')
+      }).catch((error) => {
+        console.log(error)
+      })
+  }
 
   render() {
 
     const data = this.state.tasks;
+
+    const alt = this.state.alt;
+
     const today = Date.now();
 
     const getpayment = (payment) => {
       return payment === 'Paypal' ? 'fa fa-paypal' :
         payment === 'Visa' ? 'fa fa-cc-visa' :
-        payment === 'Credit' ? 'fa fa-credit-card-alt' :
-        payment === 'Strip' ? 'fa fa-cc-stripe' :
-        payment === 'Google' ? 'fa fa-google-wallet' :
-        'fa fa-cc-mastercard'
+          payment === 'Credit' ? 'fa fa-credit-card-alt' :
+            payment === 'Strip' ? 'fa fa-cc-stripe' :
+              payment === 'Google' ? 'fa fa-google-wallet' :
+                'fa fa-cc-mastercard'
+    }
+
+    const progress = (pecent) => {
+      return pecent > 85 ? 'success' :
+        pecent > 50 ? 'info' :
+          pecent > 30 ? 'warning' :
+            'danger'
     }
 
     let imgPreview;
@@ -246,9 +338,13 @@ class Tasks extends Component {
                       <Button onClick={this.toggle} type="button" color="primary"><i className="icon-plus"></i> ADD</Button>
 
                       <Modal isOpen={this.state.modal} toggle={this.toggle} className="modal-primary">
-                        <ModalHeader toggle={this.toggle}>ADD TASK</ModalHeader>
+                        <ModalHeader toggle={this.toggle}>{alt == 0 ? "ADD TASK" : "UPDATE TASK"} </ModalHeader>
                         <ModalBody>
                           <Form action={this.addtask} method="post" encType="multipart/form-data" className="form-horizontal">
+                            <Col style={{ textAlign: "center" }}>
+                              <img src={this.state.user.imgurl} alt='' style={{ size: "relative", borderRadius: "50%" }} />
+                            </Col>
+
                             <FormGroup row>
                               <Col md="3" style={{ textAlign: "right" }}>
                                 <Label htmlFor="text-input">Client</Label>
@@ -319,7 +415,7 @@ class Tasks extends Component {
                                 <Label htmlFor="select">payment</Label>
                               </Col>
                               <Col xs="12" md="9">
-                                <Input type="select" name="select" id="select" onChange={this.onChangePayment}>
+                                <Input type="select" name="select" id="select" value={this.state.user.payment} onChange={this.onChangePayment}>
                                   <option value="0">Please select</option>
                                   <option value="Paypal">Paypal</option>
                                   <option value="Visa">Visa Card</option>
@@ -331,32 +427,49 @@ class Tasks extends Component {
                               </Col>
                             </FormGroup>
 
-                            <FormGroup row>
-                              <Col md="3" style={{ textAlign: "right" }}>
+                            {alt == 0 ? "" :
+                              <>
+                                <FormGroup row>
+                                  <Col md="3" style={{ textAlign: "right" }}>
+                                    <Label htmlFor="textarea-input">Progress</Label>
+                                  </Col>
+                                  <Col xs="12" md="9">
+                                    <Input type="number" name="progress" id="progress-input"
+                                      placeholder="" value={this.state.user.progress} onChange={this.onChangeProgress} />
+                                  </Col>
+                                </FormGroup>
+                                <FormGroup row>
+                                  <Col md="3" style={{ textAlign: "right" }}>
+                                    <Label htmlFor="textarea-input">Active</Label>
+                                  </Col>
+                                  <Col xs="12" md="9">
+                                    <Input type="text" name="Active-input" id="textarea-input"
+                                      placeholder="" value={this.state.user.active} onChange={this.onChangeActive} />
+                                  </Col>
+                                </FormGroup>
+                              </>
+                            }
+                            {alt == 0 ?
+                              <FormGroup row>
+                                <Col md="3" style={{ textAlign: "right" }}>
 
-                                <Label htmlFor="file-input">File input</Label>
-                              </Col>
-                              <Col xs="12" md="9">
-                                {imgPreview}
-                                <Input type="file" id="file-input" name="imgCollection" onChange={this.onFileChange} multiple />
-                              </Col>
-                            </FormGroup>
-
-                            <FormGroup row hidden>
-                              <Col md="3" style={{ textAlign: "right" }}>
-                                <Label className="custom-file" htmlFor="custom-file-input">Custom file input</Label>
-                              </Col>
-                              <Col xs="12" md="9">
-                                <Label className="custom-file">
-                                  <Input className="custom-file" type="file" id="custom-file-input" name="file-input" />
-                                  <span className="custom-file-control"></span>
-                                </Label>
-                              </Col>
-                            </FormGroup>
+                                  <Label htmlFor="file-input">File input</Label>
+                                </Col>
+                                <Col xs="12" md="9">
+                                  {imgPreview}
+                                  <Input type="file" id="file-input" name="imgCollection" onChange={this.onFileChange} multiple />
+                                </Col>
+                              </FormGroup>
+                              : ""}
                           </Form>
                         </ModalBody>
                         <ModalFooter>
-                          <Button type="submit" color="primary" onClick={this.addtask}>Add Task</Button>{' '}
+                          {alt == 0 ?
+                            <Button type="submit" color="primary" onClick={this.addtask}>Done</Button>
+                            :
+                            <Button type="submit" color="primary" onClick={this.updatesubmit}>Done</Button>
+                          }
+                          {' '}
                           <Button color="secondary" onClick={this.toggle}>Cancel</Button>
                         </ModalFooter>
                       </Modal>
@@ -377,63 +490,72 @@ class Tasks extends Component {
                       <th>Deadline</th>
                       <th className="text-center">Payment Method</th>
                       <th>Progress</th>
+                      <th>Active</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     {data.map((item, index) => {
                       const flag = flag_config.find(flag => flag.id.toString() === item.country);
-                      if ( flag !==undefined)
-                      return (
-                        <tr>
-                          <td className="text-center">
-                            <Row style={{ justifyContent: "left", paddingLeft: "20px" }}>
-                              <div className="avatar">
-                                <img src={item.imgurl} className="img-avatar" alt="admin@bootstrapmaster.com" />
-                                <span className="avatar-status badge-success"></span>
+                      if (flag !== undefined)
+                        return (
+                          <tr>
+                            <td className="text-center">
+                              <Row style={{ justifyContent: "left", paddingLeft: "20px" }}>
+                                <div className="avatar">
+                                  <img src={item.imgurl} className="img-avatar" alt="admin@bootstrapmaster.com" />
+                                  <span className="avatar-status badge-success"></span>
+                                </div>
+                                <div style={{ marginLeft: "10px", paddingTop: "4%" }}>{item.client}</div>
+                              </Row>
+                              <div className="small text-muted">
+                                <span>New</span> | Registered: Jan 1, 2015
                               </div>
-                              <div style={{ marginLeft: "10px", paddingTop: "4%" }}>{item.client}</div>
-                            </Row>
-                            <div className="small text-muted">
-                              <span>New</span> | Registered: Jan 1, 2015
-                        </div>
-                          </td>
-                          <td>
-                            <div>{item.tasktitle}</div>
-                          </td>
-                          <td className="text-center">
-                            <i className={flag.name} title={item.country} id={item.country}></i>
-                          </td>
-                          <td>
-                            <div>{item.level}</div>
-                          </td>
-                          <td>
-                            <div>{item.type}</div>
-                          </td>
-                          <td>
-                            <div>{item.budget}</div>
-                          </td>
-                          <td>
-                            <div className="clearfix">
-                              <div className="float-left">
-                                <small className="text-muted">Jun 11, 2015 - {item.deadline}</small>
+                            </td>
+                            <td>
+                              <div>{item.tasktitle}</div>
+                            </td>
+                            <td className="text-center">
+                              <i className={flag.name} title={item.country} id={item.country}></i>
+                            </td>
+                            <td>
+                              <div>{item.level}</div>
+                            </td>
+                            <td>
+                              <div>{item.type}</div>
+                            </td>
+                            <td>
+                              <div>{item.budget}</div>
+                            </td>
+                            <td>
+                              <div className="clearfix">
+                                <div className="float-left">
+                                  <small className="text-muted">{item.date} - {item.deadline}</small>
+                                </div>
                               </div>
-                            </div>
-                          </td>
-                          <td className="text-center">
-                            <i className={getpayment(item.payment)} style={{ fontSize: 24 + 'px' }}></i>
-                          </td>
-                          <td>
-                            <div className="clearfix">
-                              <div className="float-left">
-                                <strong>{item.progress}%</strong>
+                            </td>
+                            <td className="text-center">
+                              <i className={getpayment(item.payment)} style={{ fontSize: 24 + 'px' }}></i>
+                            </td>
+                            <td>
+                              <div className="clearfix">
+                                <div className="float-left">
+                                  <strong>{item.progress}%</strong>
+                                </div>
+                                <div className="float-right">
+                                  <small className="text-muted">{item.date}- {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(today)}</small>
+                                </div>
                               </div>
-                              <div className="float-right">
-                                <small className="text-muted">{item.date}- {new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit'}).format(today)}</small>
-                              </div>
-                            </div>
-                            <Progress className="progress-xs" color="info" value={item.progress} />
-                          </td>
-                        </tr>)
+                              <Progress className="progress-xs" color={progress(item.progress)} value={item.progress} />
+                            </td>
+                            <td>
+                              <div>{item.active}</div>
+                            </td>
+                            <td>
+                              <Button onClick={() => this.update(item._id)} block color="primary">Update</Button>
+                              <Button onClick={() => this.delete(item._id)} block color="danger">Delete</Button>
+                            </td>
+                          </tr>)
                     }
                     )}
                   </tbody>

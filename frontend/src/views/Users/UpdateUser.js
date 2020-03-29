@@ -135,7 +135,7 @@ class UpdateUser extends Component {
 
     axios.put("api/users/update-user/" + id, data, {
     }).then(res => {
-      window.location.href = "/users";
+      this.state.user.admin == "admin" ? window.location.href = "/users" : window.location.href = "/"    
       // }).catch((err)=>{
       //   this.setState({
       //     errors:  err.response.data
@@ -143,7 +143,6 @@ class UpdateUser extends Component {
       //console.log(err)
 
     })
-    console.log(formData)
     axios.post("/api/users/upload-images/" + id, formData, {
     }).then(res => {
       //console.log(res.data)

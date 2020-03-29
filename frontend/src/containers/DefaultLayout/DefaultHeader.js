@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Badge, UncontrolledDropdown, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem } from 'reactstrap';
+import { Badge, UncontrolledDropdown, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, Collapse, Button, Row } from 'reactstrap';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { AppAsideToggler, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 // import logo from '../../assets/img/brand/logo.svg'
 import logo1 from '../../assets/img/brand/school.svg'
 import sygnet from '../../assets/img/brand/sygnet.svg'
+import Message from '../../views/Message';
 // import logo2 from '../../assets/img/brand/logo1.svg'
 // import icon from '../../assets/img/brand/icon.svg'
 
@@ -16,21 +17,32 @@ const propTypes = {
 
 const defaultProps = {};
 
-const id = localStorage.getItem("id");
-
 class DefaultHeader extends Component {
 
   constructor (props) {
-    super(props)
+    super(props);
     this.state={
-      user:{}
+      user:{},
+      //accordion: [false, false, false],
     }
+
+    //this.toggleAccordion = this.toggleAccordion.bind(this);
   }
+
+  // toggleAccordion(tab) {
+
+  //   const prevState = this.state.accordion;
+  //   const state = prevState.map((x, index) => tab === index ? !x : false);
+
+  //   this.setState({
+  //     accordion: state,
+  //   });
+  // }
 
 
   componentDidMount(){
 
-    const id = localStorage.getItem("id");
+    const id = this.props.id;
     axios.get('/api/users/' + id)
       .then(res=>{
         this.setState ({
@@ -51,20 +63,37 @@ class DefaultHeader extends Component {
           full={{ src: logo1, width: 89, height: 25, alt: 'CoreUI Logo' }}
           minimized={{ src: sygnet, width: 30, height: 30, alt: 'CoreUI Logo' }}
         />
-        <AppSidebarToggler className="d-md-down-none" display="lg" />
+        <AppSidebarToggler className="d-md-down-none" display="lg"/>
 
         <Nav className="d-md-down-none" navbar>
           <NavItem className="px-3">
-            <NavLink to="/dashboard" className="nav-link" >Dashboard</NavLink>
+            <NavLink to="/dashboard" className="nav-link" active>Dashboard</NavLink>
           </NavItem>
+          {this.state.user.admin == "admin" ? 
           <NavItem className="px-3">
             <Link to="/users" className="nav-link">Users</Link>
           </NavItem>
+          :""}
           <NavItem className="px-3">
-            <NavLink to="#" className="nav-link">Settings</NavLink>
+            <NavLink to="/schools" className="nav-link">Schools</NavLink>
+          </NavItem>
+          <NavItem className="px-3">
+            <NavLink to="/message" className="nav-link">Messages</NavLink>
+          </NavItem>
+          <NavItem className="px-3">
+            <NavLink to="/tasks" className="nav-link">Tasks</NavLink>
+          </NavItem>
+          <NavItem className="px-3">
+            <NavLink to="#" className="nav-link" onClick={() => this.props.onToggle(0)} >Collapse</NavLink>
+            {/* <Button block color="link" className="text-left m-0 p-0" onClick={() => this.props.onToggle(0)} aria-expanded={this.state.accordion[0]} aria-controls="collapseOne">
+              Collapse
+            </Button> */}
+          </NavItem>
+          <NavItem className="px-3">
+            <NavLink to="/schools" className="nav-link">Schools</NavLink>
           </NavItem>
         </Nav>
-        <Nav className="ml-auto" navbar>
+        <Nav className="ml-auto">
           <NavItem className="d-md-down-none">
             <NavLink to="#" className="nav-link"><i className="icon-bell"></i><Badge pill color="danger">5</Badge></NavLink>
           </NavItem>
@@ -96,7 +125,8 @@ class DefaultHeader extends Component {
           </UncontrolledDropdown>
         </Nav>
         <AppAsideToggler className="d-md-down-none" />
-        {/*<AppAsideToggler className="d-lg-none" mobile />*/}
+        {/* <AppAsideToggler className="d-lg-none" mobile /> */}         
+
       </React.Fragment>
     );
   }

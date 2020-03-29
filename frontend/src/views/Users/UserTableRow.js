@@ -33,9 +33,8 @@ export default class UserTableRow extends Component {
       const userLink = `/users/${this.props.user._id}`
       const role = this.props.user.role;
       const getBadge = (status) => {
-        return status === 'active' ? 'success' :
-          status === 'inactive' ? 'secondary' :
-                'primary'
+        return status === 'active' ? '#4dbd74' : '#c8ced3'
+
       }
       const getColor = (status) => {
         return status === 'active' ? 'success' :
@@ -55,7 +54,8 @@ export default class UserTableRow extends Component {
                 <td className="align-middle">{this.props.user.userid}</td>
                 <td className="align-middle">{this.props.user.email}</td>
                 <td className="align-middle">{this.props.user.date}</td>
-                <td className="align-middle" style={{textAlign:"center"}}><h3><Badge color={getBadge(role)} pill>{role}</Badge></h3></td>
+                <td className="align-middle">{this.props.user.admin}</td>
+                <td className="align-middle" style={{textAlign:"center",color:getBadge(role)}}>{role}</td>
                 <td className="align-middle" style={{textAlign:"center"}}>
                     <Button onClick={()=>this.props.status(this.props.user._id)} color={getColor(role)} id = "status" className="btn-pill" >{status(role)}</Button>
                     <Button onClick={()=>this.props.onClick(this.props.user._id)} color="danger" className="btn-pill" >Delete</Button>

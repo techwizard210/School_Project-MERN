@@ -59,8 +59,6 @@ class Message extends Component {
       accordion: state,
     });
 
-    console.log(this.state.accordion);
-
   }
 
 

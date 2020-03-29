@@ -136,7 +136,8 @@ class Users extends Component {
                       <th scope="col">UserID</th>
                       <th scope="col">Email</th>
                       <th scope="col">registerd</th>
-                      <th scope="col"  style={{textAlign:"center"}}>role</th>
+                      <th scope="col">admin</th>
+                      <th scope="col"  style={{textAlign:"center"}}>active</th>
                       <th scope="col" style={{textAlign:"center"}}>Action</th>
                     </tr>
                   </thead>
