@@ -9,7 +9,9 @@ const flag_config = [
     {id: 'cn', name: 'flag-icon flag-icon-cn h4 mb-0'},
     {id: 'gp', name: 'flag-icon flag-icon-gp h4 mb-0'},
     {id: 'es', name: 'flag-icon flag-icon-es h4 mb-0'},
-    {id: 'gr', name: 'flag-icon flag-icon-gr h4 mb-0'}
+    {id: 'gr', name: 'flag-icon flag-icon-gr h4 mb-0'},
+    {id: 'austria', name: 'flag-icon flag-icon-at h4 mb-0'},
+    {id: 'india', name: 'flag-icon flag-icon-in h4 mb-0'}
 ]
   
   export default flag_config

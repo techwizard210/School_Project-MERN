@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const TaskSchema = new Schema({
+    id:{
+        type: String
+    },
 
     imgurl: {
         type: Array

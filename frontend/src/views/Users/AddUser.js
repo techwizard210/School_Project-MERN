@@ -14,6 +14,7 @@ import {
     Label
 } from 'reactstrap';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 class UpdateUser extends Component {
 
@@ -262,7 +263,8 @@ class UpdateUser extends Component {
 
                             </FormGroup>
                             <FormGroup className="form-actions">
-                                <Button type="submit" size="sm" color="success">ADD</Button>
+                                <Button type="submit" size="sm" color="success">ADDUSER</Button>
+                                <Link to="/users"><Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Cancel</Button></Link>
                             </FormGroup>
                         </Form>
                     </CardBody>

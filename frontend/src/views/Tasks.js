@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import {
   Card,
   CardBody,
@@ -192,6 +194,7 @@ class Tasks extends Component {
     formData.append('deadline', this.state.user.deadline);
     formData.append('description', this.state.user.description);
     formData.append('payment', this.state.user.payment);
+    formData.append('id', this.props.auth.user.userid);
 
     console.log(formData)
     axios.post("/api/users/addtask/", formData, {
@@ -286,6 +289,8 @@ class Tasks extends Component {
 
   render() {
 
+    const id = this.props.auth.user.userid;
+
     const data = this.state.tasks;
 
     const alt = this.state.alt;
@@ -306,6 +311,13 @@ class Tasks extends Component {
         pecent > 50 ? 'info' :
           pecent > 30 ? 'warning' :
             'danger'
+    }
+
+    const color = (status) => {
+      return status === 'completed' ? '#4dbd74' :
+      status === 'active' ? '#1985ac' :
+      status === 'cancelled' ? '#f86c6b' :
+            '#23282c'
     }
 
     let imgPreview;
@@ -495,7 +507,7 @@ class Tasks extends Component {
                   <tbody>
                     {data.map((item, index) => {
                       const flag = flag_config.find(flag => flag.id.toString() === item.country);
-                      if (flag !== undefined)
+                      if (flag !== undefined && item.id === id)
                         return (
                           <tr key = {index}>
                             <td className="text-center">
@@ -547,7 +559,7 @@ class Tasks extends Component {
                               <Progress className="progress-xs" color={progress(item.progress)} value={item.progress} />
                             </td>
                             <td>
-                              <div>{item.active}</div>
+                              <div style = {{color:color(item.active)}}>{item.active}</div>
                             </td>
                             <td>
                               <Button onClick={() => this.update(item._id)} block color="primary">Update</Button>
@@ -567,4 +579,15 @@ class Tasks extends Component {
   }
 }
 
-export default Tasks;
+// export default Tasks;
+Tasks.propTypes = {
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
+};
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+export default connect(
+  mapStateToProps
+)(Tasks);;

@@ -496,7 +496,8 @@ router.post('/addtask/',upload.array('imgCollection',6),(req, res, next) => {
                 payment: req.body.payment,
                 date: date,
                 progress: 0,
-                active: "active"
+                active: "active",
+                id: req.body.id
 
             });
 

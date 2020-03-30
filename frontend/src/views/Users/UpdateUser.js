@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import {
   Button,
   Card,
@@ -236,7 +236,7 @@ class UpdateUser extends Component {
 
             </CardBody>
             <CardFooter>
-              <Button type="submit" size="sm" color="success"><i className="fa fa-dot-circle-o"></i> Submit</Button>
+              <Button type="submit" size="sm" color="success"><i className="fa fa-dot-circle-o"></i> UpdateUser</Button>
               <Link to="/dashboard"><Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Cancel</Button></Link>
             </CardFooter>
           </Form>
