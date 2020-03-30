@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Badge, UncontrolledDropdown, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, Collapse, Button, Row } from 'reactstrap';
+import { Badge, UncontrolledDropdown, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { AppAsideToggler, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 // import logo from '../../assets/img/brand/logo.svg'
 import logo1 from '../../assets/img/brand/school.svg'
 import sygnet from '../../assets/img/brand/sygnet.svg'
-import Message from '../../views/Message';
+//import Message from '../../views/Message';
 // import logo2 from '../../assets/img/brand/logo1.svg'
 // import icon from '../../assets/img/brand/icon.svg'
 
@@ -55,6 +55,7 @@ class DefaultHeader extends Component {
 
     // eslint-disable-next-line
     const { children, ...attributes } = this.props;
+    const userLink = `/updateuser/${this.props.id}`
 
     return (
       <React.Fragment>
@@ -67,7 +68,7 @@ class DefaultHeader extends Component {
 
         <Nav className="d-md-down-none" navbar>
           <NavItem className="px-3">
-            <NavLink to="/dashboard" className="nav-link" active>Dashboard</NavLink>
+            <NavLink to="/dashboard" className="nav-link">Dashboard</NavLink>
           </NavItem>
           {this.state.user.admin == "admin" ? 
           <NavItem className="px-3">
@@ -109,7 +110,7 @@ class DefaultHeader extends Component {
             </DropdownToggle>
             <DropdownMenu right>
               <DropdownItem header tag="div" className="text-center"><strong>Account</strong></DropdownItem>
-              <DropdownItem><i className="fa fa-bell-o"></i><Link to="/updateuser"> Updates</Link><Badge color="info">42</Badge></DropdownItem>
+              <DropdownItem><i className="fa fa-bell-o"></i><Link to={userLink}> Updates</Link><Badge color="info">42</Badge></DropdownItem>
               <DropdownItem><i className="fa fa-envelope-o"></i><Link to="/message"> Messages</Link><Badge color="success">42</Badge></DropdownItem>
               <DropdownItem><i className="fa fa-tasks"></i><Link to="/tasks"> Tasks<Badge color="danger">42</Badge></Link></DropdownItem>
               <DropdownItem><i className="fa fa-comments"></i> Comments<Badge color="warning">42</Badge></DropdownItem>

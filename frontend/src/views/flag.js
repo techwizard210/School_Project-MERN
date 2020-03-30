@@ -8,7 +8,8 @@ const flag_config = [
     {id: 'ca', name: 'flag-icon flag-icon-ca h4 mb-0'},
     {id: 'cn', name: 'flag-icon flag-icon-cn h4 mb-0'},
     {id: 'gp', name: 'flag-icon flag-icon-gp h4 mb-0'},
-    {id: 'es', name: 'flag-icon flag-icon-es h4 mb-0'}
+    {id: 'es', name: 'flag-icon flag-icon-es h4 mb-0'},
+    {id: 'gr', name: 'flag-icon flag-icon-gr h4 mb-0'}
 ]
   
   export default flag_config

@@ -38,13 +38,16 @@ class DefaultLayout extends Component {
       accordion: [false, false, false],
       user:[]
     }
-    // const id = localStorage.getItem("id");
-    // axios.get('/api/users/' + id)
-    //   .then(res=>{
-    //     this.setState ({
-    //       user: res.data
-    //     })
-    //   })
+    const id = this.props.auth.user.id;
+    axios.get('/api/users/' + id)
+      .then(res=>{
+        this.setState ({
+          user: res.data
+        })
+      })
+    console.log(this.props.auth);
+    
+    console.log("construct");
     this.handleOutsideClick = this.handleOutsideClick.bind(this);
   }
 
@@ -99,18 +102,20 @@ class DefaultLayout extends Component {
   }
 
   componentDidMount(){
+    console.log("didmount");
 
-    const id = this.props.auth.user.id;
-    axios.get('/api/users/' + id)
-      .then(res=>{
-        this.setState ({
-          user: res.data
-        })
-      })
+
+    // const id = this.props.auth.user.id;
+    // axios.get('/api/users/' + id)
+    //   .then(res=>{
+    //     this.setState ({
+    //       user: res.data
+    //     })
+    //   })
   }
 
   render() {
-    console.log(this.props.auth.user.id)
+    console.log(this.props.auth.user.admin)
     return (
       <div className="app">
         <AppHeader fixed>
@@ -151,7 +156,7 @@ class DefaultLayout extends Component {
                         )} />
                     ) : (null);
                   })}
-                  {this.state.user.admin == "admin" ? 
+                  {this.props.auth.user.admin === "admin" ? 
                   <Route path="/users" component={Users} />
                 :""}
                   <Redirect from="/" to="/dashboard" />

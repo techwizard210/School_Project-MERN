@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Badge, Card, CardBody, CardHeader, Col, ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText, Row, TabContent, TabPane, Button, Collapse } from 'reactstrap';
+import { Badge, Card, CardBody, CardHeader, Col, ListGroup, ListGroupItem, Row, TabContent, TabPane, Button, Collapse } from 'reactstrap';
 import axios from 'axios';
 class Message extends Component {
 
@@ -15,7 +15,7 @@ class Message extends Component {
       messages: []
     };
 
-    axios.get('api/users/messages')
+    axios.get('/api/users/messages')
     .then(res => {
 
       const data = res.data;
@@ -95,7 +95,7 @@ class Message extends Component {
                         {data.map((item, index) =>
                           {if(item.type == "inbox"){
                             return(
-                            <Card className="mb-0">
+                            <Card className="mb-0" key = {index}>
                               <CardHeader id="headingOne">
                                 <Button block color="link" className="text-left m-0 p-0" onClick={() => this.toggleAccordion(index)} aria-expanded={this.state.accordion[index]} aria-controls="collapseOne">
                                   <h5 className="m-0 p-0">{item.title}</h5>
@@ -118,7 +118,7 @@ class Message extends Component {
                       {data.map((item, index) =>
                           {if(item.type == "sent"){
                             return(
-                            <Card className="mb-0">
+                            <Card className="mb-0" key = {index}>
                               <CardHeader id="headingOne1">
                                 <Button block color="link" className="text-left m-0 p-0" onClick={() => this.toggleAccordion(index)} aria-expanded={this.state.accordion[index]} aria-controls="collapseOne1">
                                   <h5 className="m-0 p-0">{item.title}</h5>
@@ -140,7 +140,7 @@ class Message extends Component {
                       {data.map((item, index) =>
                           {if(item.type == "draft"){
                             return(
-                            <Card className="mb-0">
+                            <Card className="mb-0" key = {index}>
                               <CardHeader id="headingOne">
                                 <Button block color="link" className="text-left m-0 p-0" onClick={() => this.toggleAccordion(index)} aria-expanded={this.state.accordion[0]} aria-controls="collapseOne">
                                   <h5 className="m-0 p-0">{item.title}</h5>
@@ -162,7 +162,7 @@ class Message extends Component {
                       {data.map((item, index) =>
                           {if(item.type == "trash"){
                             return(
-                            <Card className="mb-0">
+                            <Card className="mb-0" key = {index}>
                               <CardHeader id="headingOne">
                                 <Button block color="link" className="text-left m-0 p-0" onClick={() => this.toggleAccordion(index)} aria-expanded={this.state.accordion[0]} aria-controls="collapseOne">
                                   <h5 className="m-0 p-0">{item.title}</h5>

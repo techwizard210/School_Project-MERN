@@ -52,8 +52,6 @@ router.post("/register", (req,res) => {
        
     const { errors, isValid } = validateRegisterInput(req.body);
 
-    console.log(isValid)
-
     if (!isValid) {
         return res.status(400).json(errors);
     }
@@ -86,8 +84,6 @@ router.post("/register", (req,res) => {
 });
 
 router.post("/add", (req,res) => {
-
-    console.log(req.body)
        
     const { errors, isValid } = validateRegisterInput(req.body);
 
@@ -147,7 +143,8 @@ router.post("/login", (req, res) => {
             if (isMatch) {
                 const payload = {
                     id: user.id,
-                    userid: user.userid
+                    userid: user.userid,
+                    admin: user.admin
                 };
 
                 jwt.sign(
@@ -308,7 +305,6 @@ router.route('/change-action/:id').put((req, res, next)=>{
             console.log(error)
         } else {
             res.json(data)
-            console.log('Active updated successfully')
         }
     })
 }
@@ -342,23 +338,37 @@ var upload = multer({
     }
 })
 
-router.post('/upload-images/:id',upload.array('imgCollection',6),(req, res, next) => {
+router.post('/updateuser/:id',upload.array('imgCollection',6),(req, res, next) => {
 
-    const reqFiles = [];
-    if (req.files.length == 0) {
-        const error = new Error('Please choose files')
-        error.httpStatusCode = 400
-        return next(error)
-      }
-    //const url = req.protocol + '://' + req.get('host')
-    const url = 'http://10.10.10.193:5000';
-    for (var i = 0; i < req.files.length; i++) {
-        reqFiles.push(url + '/public/' + req.files[i].filename)
-    }
+    // const reqFiles = [];
+    // if (req.files.length == 0) {
+    //     const error = new Error('Please choose files')
+    //     error.httpStatusCode = 400
+    //     return next(error)
+    //   }
+    // //const url = req.protocol + '://' + req.get('host')
+    // const url = 'http://10.10.10.193:5000';
+    // for (var i = 0; i < req.files.length; i++) {
+    //     reqFiles.push(url + '/public/' + req.files[i].filename)
+    // }
     User.findOne({_id:req.params.id})
         .then(user=>{
-            console.log(reqFiles)
-            user.imgurl = reqFiles;
+            const reqFiles = [];
+            if (req.files.length == 0) {
+                // const error = new Error('Please choose files')
+                // error.httpStatusCode = 400
+                // return next(error)
+              } else {
+                //const url = req.protocol + '://' + req.get('host')
+                const url = 'http://10.10.10.193:5000';
+                for (var i = 0; i < req.files.length; i++) {
+                    reqFiles.push(url + '/public/' + req.files[i].filename)
+                }
+                user.imgurl = reqFiles;                  
+              }
+
+            user.name = req.body.name;
+            user.userid = req.body.userid;
             User.findByIdAndUpdate(req.params.id,{
                 $set:user
             },(error,data)=> {
@@ -400,7 +410,8 @@ router.post('/upload-images/',upload.array('imgCollection',6),(req, res, next) =
                 email: req.body.email,
                 password: req.body.password,
                 imgurl: reqFiles,
-                role: req.body.role,                
+                role: req.body.role,   
+                admin: "user"             
             });
 
             bcrypt.genSalt(10, (err, salt)=>{
@@ -432,7 +443,6 @@ router.get("/search/:id", (req, res)=> {
     const searchname = req.params.id;
     User.find({ name: searchname})
         .then(user => {
-            console.log(user)
             if(user){
                 res.json(user);
             }

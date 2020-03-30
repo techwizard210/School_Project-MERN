@@ -10,10 +10,6 @@ import {
 } from 'reactstrap';
 
 class Schools extends Component {
-  constructor(props) {
-    super(props);
-
-  }
 
   render() {
 

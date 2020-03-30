@@ -14,7 +14,6 @@ import {
     Label
 } from 'reactstrap';
 import axios from 'axios';
-import User from './User';
 
 class UpdateUser extends Component {
 
@@ -23,14 +22,14 @@ class UpdateUser extends Component {
         this.state = {
             file: null,
             imgCollection: null,
-            user: {},
+            user: {"role":"inactive"},
             errors: {}
         }
-        var user = this.state.user;
-            user.role = "inactive";
-            this.setState({
-                user: user
-            })
+        // var user = this.state.user;
+        //     user.role = "inactive";
+        //     this.setState({
+        //         user: user
+        //     })
         this.uploadSingleFile = this.uploadSingleFile.bind(this);
         this.upload = this.upload.bind(this);
         this.onFileChange = this.onFileChange.bind(this);
@@ -45,77 +44,67 @@ class UpdateUser extends Component {
 
     onChangeRole(e) {
         console.log(e.target.value)
-        if(e.target.value == 'option1'){
-            var user = this.state.user;
-            user.role = "active";
+        if(e.target.value === 'option1'){
+            var data = this.state.user;
+            data.role = "active";
             this.setState({
-                user: user
+                user: data
             })
         } else {
-            var user = this.state.user;
-            user.role = "inactive";
+            //var user = this.state.user;
+            data.role = "inactive";
             this.setState({
-                user: user
+                user: data
             })
         }
     }
 
     onChange(e) {
-        var user = this.state.user;
-        user.userid = e.target.value;
-        user = user;
+        var data = this.state.user;
+        data.userid = e.target.value;
         this.setState({
-            user: user
+            user: data
         })
     }
 
     onChangeName(e) {
-        const userid = e.target.value;
-        var user = this.state.user;
-        user.name = e.target.value;
-        user = user;
+        var data = this.state.user;
+        data.name = e.target.value;
         this.setState({
-            user: user
+            user: data
         })
+        console.log(data)
     }
 
     onChangeEmail(e) {
-        const userid = e.target.value;
-        var user = this.state.user;
-        user.email = e.target.value;
-        user = user;
+        var data = this.state.user;
+        data.email = e.target.value;
         this.setState({
-            user: user
+            user: data
         })
     }
 
     onChangeOldPassword(e) {
-        const userid = e.target.value;
-        var user = this.state.user;
-        user.oldpassword = e.target.value;
-        user = user;
+        var data = this.state.user;
+        data.oldpassword = e.target.value;
         this.setState({
-            user: user
+            user: data
         })
     }
 
     onChangePassword(e) {
-        const userid = e.target.value;
-        var user = this.state.user;
-        user.password = e.target.value;
-        user = user;
+        var data = this.state.user;
+        data.password = e.target.value;
         this.setState({
-            user: user
+            user: data
         })
     }
 
     onChangeConfirmPassword(e) {
-        const userid = e.target.value;
-        var user = this.state.user;
-        user.confirmpassword = e.target.value;
-        user = user;
+        var data = this.state.user;
+        data.confirmpassword = e.target.value;
         this.setState({
-            user: user
+            user: data
         })
 
     }
@@ -155,7 +144,7 @@ class UpdateUser extends Component {
             window.location.href = "/users";
 
         }).catch((error) => {
-            //alert('Please choose a file');
+            alert(error.response.data.email)
         })
 
     }
@@ -193,7 +182,7 @@ class UpdateUser extends Component {
                                     <InputGroupAddon addonType="prepend">
                                         <InputGroupText><i className="fa fa-user"></i></InputGroupText>
                                     </InputGroupAddon>
-                                    <Input type="text" id="userid" name="userid" on placeholder="Userid" value={this.state.user.userid} onChange={this.onChange} autoComplete="name" />
+                                    <Input type="text" id="userid" name="userid" placeholder="Userid" value={this.state.user.userid} onChange={this.onChange} autoComplete="name" />
                                 </InputGroup>
                                 <span className="red-text"><code>{errors.userid}</code></span>
                             </FormGroup>
@@ -248,11 +237,11 @@ class UpdateUser extends Component {
                                 </Col>
                                 <Col md="9">
                                     <FormGroup check inline>
-                                        <Input className="form-check-input" type="radio" id="inline-radio1" name="inline-radios" value="option1" defaultChecked onChange={this.onChangeRole} />
+                                        <Input className="form-check-input" type="radio" id="inline-radio1" name="inline-radios" value="option1"  onChange={this.onChangeRole} />
                                         <Label className="form-check-label" check htmlFor="inline-radio1">Active</Label>
                                     </FormGroup>
                                     <FormGroup check inline>
-                                        <Input className="form-check-input" type="radio" id="inline-radio2" name="inline-radios" value="option2" onChange={this.onChangeRole}/>
+                                        <Input className="form-check-input" type="radio" id="inline-radio2" name="inline-radios" value="option2" defaultChecked onChange={this.onChangeRole}/>
                                         <Label className="form-check-label" check htmlFor="inline-radio2">Inactive</Label>
                                     </FormGroup>
                                 </Col>

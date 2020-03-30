@@ -63,9 +63,9 @@ class Login extends Component {
 
   render() {
     
-    const responseGoogle = (response) => {
-      console.log(response);
-    }
+    // const responseGoogle = (response) => {
+    //   console.log(response);
+    // }
 
     const { errors } = this.state;
     return (
@@ -134,12 +134,12 @@ class Login extends Component {
                  <Button className="btn-google-plus btn-brand mr-1 mb-1"><i className="fa fa-google"></i><span>Google</span></Button>
               </SocialButton>
             </div> */}
-            <GoogleLogin
+            {/* <GoogleLogin
         clientId="352071222096-5r27r7faqc4unbmpshqjnhi3v3v8781g.apps.googleusercontent.com" //CLIENTID NOT CREATED YET
         buttonText="LOGIN WITH GOOGLE"
         onSuccess={responseGoogle}
         onFailure={responseGoogle}
-      />
+      /> */}
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, Card, CardBody, CardHeader, Col, Row, Table, InputGroup, InputGroupAddon,Input, Button } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, Row, Table, InputGroup, InputGroupAddon,Input, Button } from 'reactstrap';
 import axios from 'axios';
 import UserTableRow from './UserTableRow';
 
@@ -22,7 +22,7 @@ class Users extends Component {
   search(e){
     const searchName = e.target.value;   
     console.log(searchName) 
-    if (searchName == ''){
+    if (searchName === ''){
       axios.get('api/users/')
       .then(res => {
         this.setState({
@@ -44,8 +44,8 @@ class Users extends Component {
   change=id=>{
      var data = this.state.users;
       for (var i in data) {
-        if (data[i]._id == id) {
-           if(data[i].role == 'active'){
+        if (data[i]._id === id) {
+           if(data[i].role === 'active'){
              data[i].role='inactive';
              break; //Stop this loop, we found it!
            }else{
@@ -58,11 +58,10 @@ class Users extends Component {
         users:data
       })
 
-    const user=this.state.users.filter(user => user._id == id)
-    console.log(user)
+    const user=this.state.users.filter(user => user._id === id)
     axios.put("api/users/change-action/"+id,user[0],{
     }).then(res => {
-      console.log(res.data)
+      //console.log(res.data)
     }).catch((err)=>{
       // this.setState({
       //   errors:  err.response.data

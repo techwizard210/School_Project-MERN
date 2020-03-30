@@ -16,7 +16,6 @@ import {
   Label,
 } from 'reactstrap';
 import axios from 'axios';
-import User from './User';
 
 class UpdateUser extends Component {
 
@@ -28,7 +27,7 @@ class UpdateUser extends Component {
       user: {},
       errors: {}
     }
-    this.uploadSingleFile = this.uploadSingleFile.bind(this);
+    // this.uploadSingleFile = this.uploadSingleFile.bind(this);
     this.upload = this.upload.bind(this);
     this.onFileChange = this.onFileChange.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -40,121 +39,105 @@ class UpdateUser extends Component {
   }
 
   onChange(e) {
-    var user = this.state.user;
-    user.userid = e.target.value;
-    user = user;
+    var data = this.state.user;
+    data.userid = e.target.value;
+    //user = data;
     this.setState({
-      user: user
+      user: data
     })
   }
 
   onChangeName(e) {
-    const userid = e.target.value;
-    var user = this.state.user;
-    user.name = e.target.value;
-    user = user;
+    var data = this.state.user;
+    data.name = e.target.value;
     this.setState({
-      user: user
+      user: data
     })
   }
 
   onChangeEmail(e) {
-    const userid = e.target.value;
-    var user = this.state.user;
-    user.email = e.target.value;
-    user = user;
+    var data = this.state.user;
+    data.email = e.target.value;
     this.setState({
-      user: user
+      user: data
     })
   }
 
   onChangeOldPassword(e) {
-    const userid = e.target.value;
-    var user = this.state.user;
-    user.oldpassword = e.target.value;
-    user = user;
+    var data = this.state.user;
+    data.oldpassword = e.target.value;
     this.setState({
-      user: user
+      user: data
     })
   }
 
   onChangePassword(e) {
-    const userid = e.target.value;
-    var user = this.state.user;
-    user.password = e.target.value;
-    user = user;
+    var data = this.state.user;
+    data.password = e.target.value;
     this.setState({
-      user: user
+      user: data
     })
   }
 
   onChangeConfirmPassword(e) {
-    const userid = e.target.value;
-    var user = this.state.user;
-    user.confirmpassword = e.target.value;
-    user = user;
+    var data = this.state.user;
+    data.confirmpassword = e.target.value;
     this.setState({
-      user: user
+      user: data
     })
-    console.log(this.state.user)
+    //console.log(this.state.user)
   }
 
-  uploadSingleFile(e) {
-    this.setState({
-      file: URL.createObjectURL(e.target.files[0])
-    })
-  }
+  // uploadSingleFile(e) {
+
+  //   this.setState({
+  //     file: URL.createObjectURL(e.target.files[0])
+  //   })
+  // }
 
   onFileChange(e) {
+    //console.log("image")
     this.setState({ imgCollection: e.target.files });
+    const data = this.state.user;
+    data.imgurl = URL.createObjectURL(e.target.files[0]);
     this.setState({
-      file: URL.createObjectURL(e.target.files[0])
+      user: data
     })
+    // this.setState({
+    //   file: URL.createObjectURL(e.target.files[0])
+    // })
   }
 
   upload(e) {
-    const id = localStorage.getItem("id");
+    const id = this.props.match.params.id;
     e.preventDefault()
     var formData = new FormData();
-    for (const key of Object.keys(this.state.imgCollection)) {
-      console.log(this.state.imgCollection[key])
-      formData.append('imgCollection', this.state.imgCollection[key]);
-      console.log(formData.getAll('imgCollection'))
+    if (this.state.imgCollection){
+      for (const key of Object.keys(this.state.imgCollection)) {
+        console.log(this.state.imgCollection[key])
+        formData.append('imgCollection', this.state.imgCollection[key]);
+        console.log(formData.getAll('imgCollection'))     
+      } 
     }
 
+    formData.append('userid', this.state.user.userid);
+    formData.append('name', this.state.user.name);
+    formData.append('email', this.state.user.email);
 
-    // var user = this.state.user;
-    // user.formData=formData;
-    // user = user;
-    //  this.setState({
-    //   user:user
-    //  })
-
-    const data = this.state.user;
-    //console.log(data)
-
-    axios.put("api/users/update-user/" + id, data, {
-    }).then(res => {
-      this.state.user.admin == "admin" ? window.location.href = "/users" : window.location.href = "/"    
-      // }).catch((err)=>{
-      //   this.setState({
-      //     errors:  err.response.data
-      //   })
-      //console.log(err)
-
-    })
-    axios.post("/api/users/upload-images/" + id, formData, {
+    axios.post("/api/users/updateuser/" + id, formData, {
     }).then(res => {
       //console.log(res.data)
+      window.location.href = "/";
 
     }).catch((error) => {
+      console.log(error.response.data);
       alert('Please choose a file');
     })
 
   }
 
   componentDidMount() {
-    const id = localStorage.getItem("id");
+    const id = this.props.match.params.id;
     axios.get('/api/users/' + id)
       .then(res => {
         this.setState({
@@ -166,13 +149,7 @@ class UpdateUser extends Component {
 
   render() {
     const errors = this.state.errors
-    let imgPreview;
-    if (this.state.file) {
-      imgPreview = <img src={this.state.file} alt='' style={{ size: "relative" }} />
-    }
     return (
-
-
 
       <Col xs="8">
         <Card>
@@ -187,7 +164,7 @@ class UpdateUser extends Component {
                   <InputGroupAddon addonType="prepend">
                     <InputGroupText><i className="fa fa-user"></i></InputGroupText>
                   </InputGroupAddon>
-                  <Input type="text" id="userid" name="userid" on placeholder="Userid" value={this.state.user.userid} onChange={this.onChange} autoComplete="name" />
+                  <Input type="text" id="userid" name="userid" placeholder="Userid" value={this.state.user.userid} onChange={this.onChange} autoComplete="name" />
                 </InputGroup>
                 <span className="red-text"><code>{errors.userid}</code></span>
               </FormGroup>
@@ -241,7 +218,8 @@ class UpdateUser extends Component {
                   <Label htmlFor="file-input">File input</Label>
                 </Col>
                 <Col md="3">
-                  {imgPreview}
+                  <img src={this.state.user.imgurl} alt='' style={{ size: "relative" }} />
+                  {/* {imgPreview} */}
                   <Input type="file" id="file-input" name="imgCollection" onChange={this.onFileChange} multiple />
                 </Col>
                 <Col md="6">

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import  {Button, Badge} from 'reactstrap';
-import { AppSwitch } from '@coreui/react'
+import  {Button} from 'reactstrap';
+//import { AppSwitch } from '@coreui/react'
 
 export default class UserTableRow extends Component {
 
@@ -14,10 +14,10 @@ export default class UserTableRow extends Component {
         this.deleteUser = this.deleteUser.bind(this);
     }
 
-    change=e=>{
-        const status =  e.target.value = "active" ? "inactive": "active";
+    // change=e=>{
+    //     const status =  e.target.value = "active" ? "inactive": "active";
 
-    };
+    // };
 
     deleteUser() {
         axios.delete('/api/users/delete-user/' + this.props.user._id)

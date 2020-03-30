@@ -18,8 +18,6 @@ import {
   Form,
   FormGroup,
   Label,
-  FormText,
-  Badge
 } from 'reactstrap';
 
 import flag_config from './flag';
@@ -233,7 +231,7 @@ class Tasks extends Component {
   search(e) {
     const searchName = e.target.value;
     const alltasks = this.state.alltasks;
-    if (searchName == '') {
+    if (searchName === '') {
       this.setState({
         tasks: alltasks
       })
@@ -248,7 +246,7 @@ class Tasks extends Component {
 
   update(id) {
     const data = this.state.alltasks;
-    const update = data.filter(task => (task._id == id))
+    const update = data.filter(task => (task._id === id))
     this.setState({
       user: update[0],
     });
@@ -338,7 +336,7 @@ class Tasks extends Component {
                       <Button onClick={this.toggle} type="button" color="primary"><i className="icon-plus"></i> ADD</Button>
 
                       <Modal isOpen={this.state.modal} toggle={this.toggle} className="modal-primary">
-                        <ModalHeader toggle={this.toggle}>{alt == 0 ? "ADD TASK" : "UPDATE TASK"} </ModalHeader>
+                        <ModalHeader toggle={this.toggle}>{alt === 0 ? "ADD TASK" : "UPDATE TASK"} </ModalHeader>
                         <ModalBody>
                           <Form action={this.addtask} method="post" encType="multipart/form-data" className="form-horizontal">
                             <Col style={{ textAlign: "center" }}>
@@ -427,7 +425,7 @@ class Tasks extends Component {
                               </Col>
                             </FormGroup>
 
-                            {alt == 0 ? "" :
+                            {alt === 0 ? "" :
                               <>
                                 <FormGroup row>
                                   <Col md="3" style={{ textAlign: "right" }}>
@@ -449,7 +447,7 @@ class Tasks extends Component {
                                 </FormGroup>
                               </>
                             }
-                            {alt == 0 ?
+                            {alt === 0 ?
                               <FormGroup row>
                                 <Col md="3" style={{ textAlign: "right" }}>
 
@@ -464,7 +462,7 @@ class Tasks extends Component {
                           </Form>
                         </ModalBody>
                         <ModalFooter>
-                          {alt == 0 ?
+                          {alt === 0 ?
                             <Button type="submit" color="primary" onClick={this.addtask}>Done</Button>
                             :
                             <Button type="submit" color="primary" onClick={this.updatesubmit}>Done</Button>
@@ -499,7 +497,7 @@ class Tasks extends Component {
                       const flag = flag_config.find(flag => flag.id.toString() === item.country);
                       if (flag !== undefined)
                         return (
-                          <tr>
+                          <tr key = {index}>
                             <td className="text-center">
                               <Row style={{ justifyContent: "left", paddingLeft: "20px" }}>
                                 <div className="avatar">
