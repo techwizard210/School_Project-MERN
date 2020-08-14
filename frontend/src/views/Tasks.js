@@ -194,9 +194,8 @@ class Tasks extends Component {
     formData.append('deadline', this.state.user.deadline);
     formData.append('description', this.state.user.description);
     formData.append('payment', this.state.user.payment);
-    formData.append('id', this.props.auth.user.userid);
+    formData.append('id', this.props.auth.user.id);
 
-    console.log(formData)
     axios.post("/api/users/addtask/", formData, {
     }).then(res => {
       window.location.href = "/tasks";
@@ -289,7 +288,7 @@ class Tasks extends Component {
 
   render() {
 
-    const id = this.props.auth.user.userid;
+    const id = this.props.auth.user.id;
 
     const data = this.state.tasks;
 

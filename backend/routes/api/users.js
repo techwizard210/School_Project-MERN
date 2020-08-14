@@ -14,6 +14,7 @@ const Message = require("../../models/Messages");
 const Task = require("../../models/Task")
 
 router.get("/task", (req, res) => {
+    console.log("task");
     Task.find()
         .then(tasks => {
             res.send(tasks);

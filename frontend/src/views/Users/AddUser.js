@@ -52,7 +52,7 @@ class UpdateUser extends Component {
                 user: data
             })
         } else {
-            //var user = this.state.user;
+            var data = this.state.user;
             data.role = "inactive";
             this.setState({
                 user: data

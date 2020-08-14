@@ -49,7 +49,7 @@ class Schools extends Component {
                       </div>
                     </td>
                     <td className="text-center">
-                      <i className="flag-icon flag-icon-kp h4 mb-0" title="us" id="us"></i>
+                      <i className="flag-icon flag-icon-gr h4 mb-0" title="us" id="us"></i>
                     </td>
                     <td>
                       <div className="clearfix">
