@@ -25,6 +25,24 @@ router.get("/task", (req, res) => {
         })
 })
 
+router.get("/task/:id", (req, res)=> {
+  
+    const id = req.params.id; 
+    Task.find({id:id})
+        .then(task=>{
+            if (!task) {
+                return res.status(404).send({
+                    message:"Task not found with id" + req.params.id
+                })
+            }
+            res.send(task);
+        }).catch(err => {
+            res.status(500).send({
+                message: err.message || "Some error occured while retrieving tasks."
+            })
+        })
+}) 
+
 router.post('/updatetask/:id',(req, res, next) => {
 
             Task.findByIdAndUpdate(req.params.id,{
@@ -67,7 +85,7 @@ router.post("/register", (req,res) => {
                 email: req.body.email,
                 password: req.body.password,
                 role:req.body.role,
-                admin:"admin"
+                admin:"user"
             });
 
             bcrypt.genSalt(10, (err, salt)=>{

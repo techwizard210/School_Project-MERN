@@ -260,15 +260,15 @@ class User extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:5000/api/users/task')
-      .then(res => {
+    axios.get('/api/users/task/' + this.props.match.params.id)
+      .then((res) => {
         this.setState({
           tasks: res.data,
           alltasks: res.data
         });
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error)
       })
   }
 
@@ -277,13 +277,7 @@ class User extends Component {
 
     const alt = this.state.alt;
 
-
-    console.log(data.length);
-
     const id = this.props.match.params.id;
-
-    console.log(id)
-
     // const user = usersData.find( user => user.id.toString() === this.props.match.params.id)
     const user = this.state.user;
 
@@ -540,7 +534,7 @@ class User extends Component {
                   </thead>
                   <tbody>
                     { data.length === 0 ?
-                      <tr><td colspan = "11" className="text-center">There is no data.</td></tr>
+                      <tr><td colSpan = "11" className="text-center">There is no data.</td></tr>
                       :
                       data.map((item, index) => {
                         const flag = flag_config.find(flag => flag.id.toString() === item.country);

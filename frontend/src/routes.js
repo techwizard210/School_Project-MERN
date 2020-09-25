@@ -40,6 +40,7 @@ const addUser = React.lazy(() => import('./views/Users/AddUser'));
 const Schools = React.lazy(() => import('./views/Schools'));
 const Message = React.lazy(() => import('./views/Message'));
 const Tasks = React.lazy(() => import('./views/Tasks'));
+const Chat = React.lazy(() => import('./views/Chat'));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
@@ -88,7 +89,8 @@ const routes = [
   { path: '/adduser', exact: true, name: 'AddUser', component: addUser },
   { path: '/schools', exact: true, name: 'Our Schools', component: Schools },
   { path: '/message', exact: true, name: 'Message', component: Message },
-  { path: '/tasks', exact: true, name: 'Tasks', component: Tasks }
+  { path: '/tasks', exact: true, name: 'Tasks', component: Tasks },
+  { path: '/chat', exact: true, name: 'Chat', component: Chat }
 ];
 
 export default routes;

@@ -157,7 +157,7 @@ class DefaultLayout extends Component {
                     ) : (null);
                   })}
                   {this.props.auth.user.admin === "admin" ? 
-                  <Route path="/users" component={Users} />
+                  <Route path="/users" name="Users" component={Users} />
                 :""}
                   <Redirect from="/" to="/dashboard" />
                 </Switch>

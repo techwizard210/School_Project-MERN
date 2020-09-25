@@ -91,7 +91,7 @@ class DefaultHeader extends Component {
             </Button> */}
           </NavItem>
           <NavItem className="px-3">
-            <NavLink to="/schools" className="nav-link">Schools</NavLink>
+            <NavLink to="/chat" className="nav-link">Chat</NavLink>
           </NavItem>
         </Nav>
         <Nav className="ml-auto">

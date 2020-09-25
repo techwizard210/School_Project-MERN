@@ -29,11 +29,16 @@ export default {
       url: '/tasks',
       icon: 'fa fa-home fa-lg',             // optional class names space delimited list for title item ex: "text-center"
     },
+    {
+      name: 'chat',
+      url: '/chat',
+      icon: 'fa fa-comments-o fa-lg',             // optional class names space delimited list for title item ex: "text-center"
+    },
     // {
     //   name: 'Colors',
     //   url: '/theme/colors',
     //   icon: 'icon-drop',
-    // },
+    // },fa fa-comments-o
     // {
     //   name: 'Typography',
     //   url: '/theme/typography',
