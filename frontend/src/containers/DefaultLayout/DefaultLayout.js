@@ -39,7 +39,7 @@ class DefaultLayout extends Component {
       user:[]
     }
     const id = this.props.auth.user.id;
-    axios.get('/api/users/' + id)
+    axios.get('/api/users/user/' + id)
       .then(res=>{
         this.setState ({
           user: res.data

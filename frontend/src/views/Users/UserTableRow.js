@@ -59,6 +59,7 @@ export default class UserTableRow extends Component {
                 <td className="align-middle" style={{textAlign:"center"}}>
                     <Button onClick={()=>this.props.status(this.props.user._id)} color={getColor(role)} id = "status" className="btn-pill" >{status(role)}</Button>
                     <Button onClick={()=>this.props.onClick(this.props.user._id)} color="danger" className="btn-pill" >Delete</Button>
+                    <Button onClick={()=>this.props.editUserModal(this.props.user._id)} color="primary" className="btn-pill" >Edit</Button>
                     {/* <AppSwitch className={'mx-1'} variant={'pill'} color={'success'} outline={'alt'} checked label dataOn={'\u2713'} dataOff={'\u2715'} /> */}
                 </td>
             </tr>

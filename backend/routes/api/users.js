@@ -9,12 +9,17 @@ const validateLoginInput = require("../../validation/login");
 
 const User = require("../../models/User");
 
-const Message = require("../../models/Messages");
+const Messages = require("../../models/Messages");
 
-const Task = require("../../models/Task")
+const Task = require("../../models/Task");
+
+const Message = require('../../models/Message');
+
+const Conversation = require('../../models/Conversation');
+
+const GlobalMessage = require('../../models/GlobalMessage');
 
 router.get("/task", (req, res) => {
-    console.log("task");
     Task.find()
         .then(tasks => {
             res.send(tasks);
@@ -57,7 +62,7 @@ router.post('/updatetask/:id',(req, res, next) => {
 })
 
 router.get("/messages", (req, res) => {
-    Message.find()
+    Messages.find()
         .then(messages => {
             res.send(messages);
         }).catch(err => {
@@ -189,7 +194,7 @@ router.post("/login", (req, res) => {
     })
 });
 
-router.get("/", (req, res) => {
+router.get("/users", (req, res) => {
     User.find()
         .then(users => {
             res.send(users);
@@ -250,7 +255,7 @@ router.delete("/delete-task/:id", (req, res)=> {
         })
 })
   
-router.get("/:id", (req, res)=> {
+router.get("/user/:id", (req, res)=> {
   
     const id = req.params.id; 
     User.findOne({_id:id})
@@ -475,6 +480,7 @@ router.get("/search/:id", (req, res)=> {
 
 router.post('/addtask/',upload.array('imgCollection',6),(req, res, next) => {
     const reqFiles = [];
+
     if (req.files.length == 0) {
         const error = new Error('Please choose files')
         error.httpStatusCode = 400
@@ -534,5 +540,193 @@ router.post('/addtask/',upload.array('imgCollection',6),(req, res, next) => {
     // });
     
 })
+
+// Post global message
+router.post('/addGlobalMessage', (req, res) => {
+    let message = new GlobalMessage({
+        from: mongoose.Types.ObjectId(req.body.from),
+        body: req.body.message
+    });
+    req.io.sockets.emit('messages', req.body.message);
+
+    message.save(err => {
+        if (err) {
+            console.log(err);
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({ message: 'Failure' }));
+            res.sendStatus(500);
+        } else {
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({ message: 'Success' }));
+        }
+    });
+});
+
+// Post private message
+router.post('/addPrivateMessage', (req, res) => {
+    let from = mongoose.Types.ObjectId(req.body.from);
+    let to = mongoose.Types.ObjectId(req.body.to);
+
+    Conversation.findOneAndUpdate(
+        {
+            recipients: {
+                $all: [
+                    { $elemMatch: { $eq: from } },
+                    { $elemMatch: { $eq: to } },
+                ],
+            },
+        },
+        {
+            recipients: [req.body.from, req.body.to],
+            lastMessage: req.body.message,
+            date: Date.now(),
+        },
+        { upsert: true, new: true, setDefaultsOnInsert: true },
+        function(err, conversation) {
+            if (err) {
+                console.log(err);
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ message: 'Failure' }));
+                res.sendStatus(500);
+            } else {
+                let message = new Message({
+                    conversation: conversation._id,
+                    to: req.body.to,
+                    from: req.body.from,
+                    body: req.body.message,
+                });
+
+                req.io.sockets.emit('messages', req.body.message);
+
+                message.save(err => {
+                    if (err) {
+                        console.log(err);
+                        res.setHeader('Content-Type', 'application/json');
+                        res.end(JSON.stringify({ message: 'Failure' }));
+                        res.sendStatus(500);
+                    } else {
+                        res.setHeader('Content-Type', 'application/json');
+                        res.end(
+                            JSON.stringify({
+                                message: 'Success',
+                                conversationId: conversation._id,
+                            })
+                        );
+                    }
+                });
+            }
+        }
+    );
+});
+
+// Get conversations list
+router.get('/conversations/:id', (req, res) => {
+    
+    let from = mongoose.Types.ObjectId(req.params.id);
+    Conversation.aggregate([
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'recipients',
+                foreignField: '_id',
+                as: 'recipientObj',
+            },
+        },
+    ])
+        .match({ recipients: { $all: [{ $elemMatch: { $eq: from } }] } })
+        .project({
+            'recipientObj.password': 0,
+            'recipientObj.__v': 0,
+            'recipientObj.date': 0,
+        })
+        .exec((err, conversations) => {
+            if (err) {
+                console.log(err);
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ message: 'Failure' }));
+                res.sendStatus(500);
+            } else {
+                res.send(conversations);
+            }
+        });
+});
+
+// Get global messages
+router.get('/global_messages', (req, res) => {
+    GlobalMessage.aggregate([
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'from',
+                foreignField: '_id',
+                as: 'fromObj',
+            },
+        },
+    ])
+        .project({
+            'fromObj.password': 0,
+            'fromObj.__v': 0,
+            'fromObj.date': 0,
+        })
+        .exec((err, messages) => {
+            if (err) {
+                console.log(err);
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ message: 'Failure' }));
+                res.sendStatus(500);
+            } else {
+                res.send(messages);
+            }
+        });
+});
+
+// Get messages from conversation
+// based on to & from
+router.get('/private_conversations/query', (req, res) => {
+    let user1 = mongoose.Types.ObjectId(req.query.from);
+    let user2 = mongoose.Types.ObjectId(req.query.to);
+    Message.aggregate([
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'to',
+                foreignField: '_id',
+                as: 'toObj',
+            },
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'from',
+                foreignField: '_id',
+                as: 'fromObj',
+            },
+        },
+    ])
+        .match({
+            $or: [
+                { $and: [{ to: user1 }, { from: user2 }] },
+                { $and: [{ to: user2 }, { from: user1 }] },
+            ],
+        })
+        .project({
+            'toObj.password': 0,
+            'toObj.__v': 0,
+            'toObj.date': 0,
+            'fromObj.password': 0,
+            'fromObj.__v': 0,
+            'fromObj.date': 0,
+        })
+        .exec((err, messages) => {
+            if (err) {
+                console.log(err);
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ message: 'Failure' }));
+                res.sendStatus(500);
+            } else {
+                res.send(messages);
+            }
+        });
+});
 
 module.exports = router;

@@ -138,7 +138,7 @@ class UpdateUser extends Component {
 
   componentDidMount() {
     const id = this.props.match.params.id;
-    axios.get('/api/users/' + id)
+    axios.get('/api/users/user/' + id)
       .then(res => {
         this.setState({
           user: res.data
@@ -218,7 +218,7 @@ class UpdateUser extends Component {
                   <Label htmlFor="file-input">File input</Label>
                 </Col>
                 <Col md="3">
-                  <img src={this.state.user.imgurl} alt='' style={{ size: "relative" }} />
+                  <img src={this.state.user.imgurl} alt='' style={{ size: "relative" }} style={{height:"100px", width:"100px"}} />
                   {/* {imgPreview} */}
                   <Input type="file" id="file-input" name="imgCollection" onChange={this.onFileChange} multiple />
                 </Col>

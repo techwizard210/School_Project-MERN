@@ -41,7 +41,8 @@
     "react-test-renderer": "^16.13.1",
     "reactstrap": "^8.5.1",
     "redux": "^4.0.5",
-    "simple-line-icons": "^2.5.2"
+    "simple-line-icons": "^2.5.2",
+    "socket.io-client": "^2.3.0"
   },
   "devDependencies": {
     "react-scripts": "^3.4.1"

@@ -165,7 +165,7 @@ class UpdateUser extends Component {
         const errors = this.state.errors
         let imgPreview;
         if (this.state.file) {
-            imgPreview = <img src={this.state.file} alt='' style={{ size: "relative" }} />
+            imgPreview = <img src={this.state.file} alt='' style={{ size: "relative", width:"100px", height:"100px" }} />
         }
         return (
 

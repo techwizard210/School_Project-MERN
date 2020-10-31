@@ -195,7 +195,7 @@ class Tasks extends Component {
     formData.append('description', this.state.user.description);
     formData.append('payment', this.state.user.payment);
     formData.append('id', this.props.auth.user.id);
-
+  
     axios.post("/api/users/addtask/", formData, {
     }).then(res => {
       window.location.href = "/tasks";
@@ -351,7 +351,7 @@ class Tasks extends Component {
                         <ModalBody>
                           <Form action={this.addtask} method="post" encType="multipart/form-data" className="form-horizontal">
                             <Col style={{ textAlign: "center" }}>
-                              <img src={this.state.user.imgurl} alt='' style={{ size: "relative", borderRadius: "50%" }} />
+                              <img src={this.state.user.imgurl} alt='' style={{ size: "relative", borderRadius: "50%", width: "50px" }} />
                             </Col>
 
                             <FormGroup row>
@@ -512,7 +512,7 @@ class Tasks extends Component {
                             <td className="text-center">
                               <Row style={{ justifyContent: "left", paddingLeft: "20px" }}>
                                 <div className="avatar">
-                                  <img src={item.imgurl} className="img-avatar" alt="admin@bootstrapmaster.com" />
+                                  <img style={{width:"50px", height: "50px"}}src={item.imgurl} className="img-avatar" alt="admin@bootstrapmaster.com" />
                                   <span className="avatar-status badge-success"></span>
                                 </div>
                                 <div style={{ marginLeft: "10px", paddingTop: "4%" }}>{item.client}</div>
@@ -544,7 +544,7 @@ class Tasks extends Component {
                               </div>
                             </td>
                             <td className="text-center">
-                              <i className={getpayment(item.payment)} style={{ fontSize: 24 + 'px' }}></i>
+                              <i className={getpayment(item.payment)} style={{ fontSize: 24 + 'px' }} title={item.payment}></i>
                             </td>
                             <td>
                               <div className="clearfix">

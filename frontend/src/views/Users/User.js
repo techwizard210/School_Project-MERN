@@ -38,7 +38,7 @@ class User extends Component {
       imgCollection: null,
       updatetask: {}
     }
-    axios.get('/api/users/' + this.props.match.params.id)
+    axios.get('/api/users/user/' + this.props.match.params.id)
       .then(res => {
         this.setState({
           user: res.data
@@ -65,7 +65,7 @@ class User extends Component {
 
   update(id) {
     const data = this.state.alltasks;
-    const update = data.filter(task => (task._id === id))
+    const update = data.filter(task => (task._id === id));
     this.setState({
       updatetask: update[0],
     });
@@ -158,8 +158,6 @@ class User extends Component {
     this.setState({
       updatetask: updatetask
     })
-
-    console.log(e.target.value)
 
   }
 
@@ -340,7 +338,7 @@ class User extends Component {
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="text-center"><img className="img-avatar" src={user.imgurl} /></td>
+                      <td className="text-center"><img style={{height:"100px", width:"100px"}} className="img-avatar" src={user.imgurl} /></td>
                       <td className="text-center">
                         <div style={{ marginLeft: "10px", paddingTop: "4%" }}>{user.name}</div>
                       </td>
@@ -384,7 +382,7 @@ class User extends Component {
                 <ModalBody>
                   <Form action={this.addtask} method="post" encType="multipart/form-data" className="form-horizontal">
                     <Col style={{ textAlign: "center" }}>
-                      <img src={this.state.updatetask.imgurl} alt='' style={{ size: "relative", borderRadius: "50%" }} />
+                      <img src={this.state.updatetask.imgurl} alt='' style={{ size: "relative", borderRadius: "50%", width:"50px" }} />
                     </Col>
 
                     <FormGroup row>
@@ -550,7 +548,7 @@ class User extends Component {
                                   <div style={{ marginLeft: "10px", paddingTop: "4%" }}>{item.client}</div>
                                 </Row>
                                 <div className="small text-muted">
-                                  <span>New</span> | Registered: Jan 1, 2015
+                                  <span>New</span> | assigned: {item.date}
                                 </div>
                               </td>
                               <td>
@@ -576,7 +574,7 @@ class User extends Component {
                                 </div>
                               </td>
                               <td className="text-center">
-                                <i className={getpayment(item.payment)} style={{ fontSize: 24 + 'px' }}></i>
+                                <i className={getpayment(item.payment)} style={{ fontSize: 24 + 'px' }} title={item.payment}></i>
                               </td>
                               <td>
                                 <div className="clearfix">

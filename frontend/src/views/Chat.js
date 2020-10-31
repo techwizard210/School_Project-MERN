@@ -6,6 +6,11 @@ import {
   CardBody,
   CardHeader,
   Col,
+  Nav,
+  NavItem,
+  NavLink,
+  TabContent,
+  TabPane,
   Progress,
   Row,
   Table,
@@ -22,7 +27,9 @@ import {
   Label,
 } from 'reactstrap';
 
-import flag_config from './flag';
+import Converstion from './converstaion';
+import ChatUsers from './chatUsers';
+import ChatBox from './ChatBox';
 
 import axios from 'axios';
 
@@ -33,15 +40,22 @@ class Tasks extends Component {
     this.state = {
       modal: false,
       primary: false,
-      user: {},
+      user: 'chatting',
+      user_id:'',
       client: '',
       file: null,
       imgCollection: null,
       tasks: [],
       alltasks: [],
       updatetask: [],
-      alt: 0
+      alt: 0,
+      activeTab: new Array(4).fill('1')
     };
+    this.toggle = this.toggle.bind(this);
+    this.setUser = this.setUser.bind(this);
+    this.setUserId = this.setUserId.bind(this);
+
+
   }
 
  
@@ -100,6 +114,39 @@ class Tasks extends Component {
       })
   }
 
+  setUser(value) {
+    this.setState({
+      user: value,
+    });
+  }
+
+  setUserId(value) {
+    this.setState({
+      user_id: value,
+    });
+  }
+
+  toggle(tabPane, tab) {
+    const newArray = this.state.activeTab.slice()
+    newArray[tabPane] = tab
+    this.setState({
+      activeTab: newArray,
+    });
+  }
+
+  tabPane() {
+    return (
+      <>
+        <TabPane tabId="1">
+          <Converstion setUser={this.setUser} setUserId={this.setUserId}/>
+        </TabPane>
+        <TabPane tabId="2">
+          <ChatUsers setUser={this.setUser} setUserId={this.setUserId}/>
+        </TabPane>
+      </>
+    );
+  }
+
   render() {
 
     return (
@@ -122,7 +169,34 @@ class Tasks extends Component {
 
               </CardHeader>
               <CardBody>
-
+                <Row>
+                  <Col xs="12" md="6" className="mb-4">
+                    <Nav tabs>
+                      <NavItem>
+                        <NavLink
+                          active={this.state.activeTab[0] === '1'}
+                          onClick={() => { this.toggle(0, '1'); }}
+                        >
+                        Chats
+                        </NavLink>
+                      </NavItem>
+                      <NavItem>
+                        <NavLink
+                          active={this.state.activeTab[0] === '2'}
+                          onClick={() => { this.toggle(0, '2'); }}
+                        >
+                          Users
+                        </NavLink>
+                      </NavItem>
+                    </Nav>
+                    <TabContent activeTab={this.state.activeTab[0]}>
+                      {this.tabPane()}
+                    </TabContent>
+                  </Col>
+                  <Col xs="12" md="6" className="mb-4">
+                    <ChatBox user = {this.state.user} user_id = {this.state.user_id}/>
+                  </Col>
+                </Row>
               </CardBody>
             </Card>
           </Col>
