@@ -363,7 +363,7 @@ var upload = multer({
 })
 
 router.post('/updateuser/:id',upload.array('imgCollection',6),(req, res, next) => {
-
+    
     // const reqFiles = [];
     // if (req.files.length == 0) {
     //     const error = new Error('Please choose files')
@@ -383,8 +383,8 @@ router.post('/updateuser/:id',upload.array('imgCollection',6),(req, res, next) =
                 // error.httpStatusCode = 400
                 // return next(error)
               } else {
-                //const url = req.protocol + '://' + req.get('host')
-                const url = 'http://10.10.10.193:5000';
+                const url = req.protocol + '://' + req.get('host');
+                const url1 = 'http://10.10.10.193:5000';
                 for (var i = 0; i < req.files.length; i++) {
                     reqFiles.push(url + '/public/' + req.files[i].filename)
                 }

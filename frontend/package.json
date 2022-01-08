@@ -18,6 +18,8 @@
     "@coreui/react": "^2.5.8",
     "axios": "^0.19.2",
     "bootstrap": "^4.5.1",
+    "browserslist": "^4.19.1",
+    "caniuse-lite": "^1.0.30001297",
     "chart.js": "^2.9.3",
     "classnames": "^2.2.6",
     "core-js": "^3.6.5",
@@ -41,7 +43,8 @@
     "react-test-renderer": "^16.13.1",
     "reactstrap": "^8.5.1",
     "redux": "^4.0.5",
-    "simple-line-icons": "^2.5.2",
+    "redux-thunk": "^2.4.1",
+    "simple-line-icons": "^2.4.1",
     "socket.io-client": "^2.3.0"
   },
   "devDependencies": {

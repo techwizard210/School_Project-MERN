@@ -97,7 +97,7 @@ const ChatBox = props => {
             <tbody>  
             {messages && ( 
                 <>
-                {messages.map(m => (
+                {messages.map((m,key) => (
                 <tr>
                     <td className="text-center">
                         <div className="avatar">
