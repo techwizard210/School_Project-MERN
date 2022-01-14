@@ -259,10 +259,7 @@ class Tasks extends Component {
       //   tasks: data.filter(task => (task.tasktitle.indexOf(searchName) > -1) || (task.client.indexOf(searchName) > -1)),
       // });
       var tasks = data.filter(task => (task.tasktitle.indexOf(searchName) > -1) || (task.client.indexOf(searchName) > -1));
-      // dispatch({
-      //   type: GET_TASKS,
-      //   payload: tasks
-      // })
+     // this.props.gettasks(tasks);
     }
 
   }
@@ -605,6 +602,7 @@ const mapStateToProps = state => ({
   errors: state.errors,
   tasks: state.task.tasks,
 });
+
 export default connect(
   mapStateToProps,
   {createTask, getTasks, deleteTask, updateTask}
