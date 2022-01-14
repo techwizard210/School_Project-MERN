@@ -22,9 +22,13 @@ import {
   Label,
 } from 'reactstrap';
 
+import { createTask, getTasks, deleteTask, updateTask } from "../actions/taskAction";
+
 import flag_config from './flag';
 
 import axios from 'axios';
+
+import { GET_TASKS } from '../actions/types';
 
 class Tasks extends Component {
   constructor(props) {
@@ -195,14 +199,20 @@ class Tasks extends Component {
     formData.append('description', this.state.user.description);
     formData.append('payment', this.state.user.payment);
     formData.append('id', this.props.auth.user.id);
-  
-    axios.post("/api/users/addtask/", formData, {
-    }).then(res => {
-      window.location.href = "/tasks";
 
-    }).catch((error) => {
-      //alert('Please choose a file');
+    this.props.createTask(formData);
+
+    this.setState({
+      modal: !this.state.modal
     })
+  
+    // axios.post("/api/users/addtask/", formData, {
+    // }).then(res => {
+    //   window.location.href = "/tasks";
+
+    // }).catch((error) => {
+    //   //alert('Please choose a file');
+    // })
   }
 
 
@@ -218,36 +228,47 @@ class Tasks extends Component {
   }
 
   componentDidMount() {
-    axios.get('api/users/task')
-      .then(res => {
-        this.setState({
-          tasks: res.data,
-          alltasks: res.data
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+    // axios.get('api/users/task')
+    //   .then(res => {
+    //     this.setState({
+    //       tasks: res.data,
+    //       alltasks: res.data
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   })
+    this.props.getTasks();
+    this.setState({
+      tasks: this.props.tasks,
+      alltasks: this.props.tasks
+    })
   }
 
-  search(e) {
+  search(e){
+    console.log("ss");
     const searchName = e.target.value;
-    const alltasks = this.state.alltasks;
+    const alltasks = this.props.tasks;
     if (searchName === '') {
       this.setState({
         tasks: alltasks
       })
     } else {
       var data = this.state.alltasks;
-      this.setState({
-        tasks: data.filter(task => (task.tasktitle.indexOf(searchName) > -1) || (task.client.indexOf(searchName) > -1)),
-      });
+      // this.setState({
+      //   tasks: data.filter(task => (task.tasktitle.indexOf(searchName) > -1) || (task.client.indexOf(searchName) > -1)),
+      // });
+      var tasks = data.filter(task => (task.tasktitle.indexOf(searchName) > -1) || (task.client.indexOf(searchName) > -1));
+      // dispatch({
+      //   type: GET_TASKS,
+      //   payload: tasks
+      // })
     }
 
   }
 
   update(id) {
-    const data = this.state.alltasks;
+    const data = this.props.tasks;
     const update = data.filter(task => (task._id === id))
     this.setState({
       user: update[0],
@@ -264,33 +285,28 @@ class Tasks extends Component {
     e.preventDefault();
     const task = this.state.user;
     const id = task._id;
-    axios.post("/api/users/updatetask/" + id, task, {
-    }).then(res => {
-      window.location.href = "/tasks";
+    // axios.post("/api/users/updatetask/" + id, task, {
+    // }).then(res => {
+    //   window.location.href = "/tasks";
 
-    }).catch((error) => {
-      //alert('Please choose a file');
-    })
+    // }).catch((error) => {
+    //   //alert('Please choose a file');
+    // })
+    this.props.updateTask(id, task);
+    this.setState({
+      modal: !this.state.modal
+    });
   }
 
   delete(id) {
-    const data = this.state.tasks;
-    this.setState({
-      tasks: data.filter(task => task._id !== id),
-    });
-    axios.delete('/api/users/delete-task/' + id)
-      .then((res) => {
-        console.log('User sucessfully deleted!')
-      }).catch((error) => {
-        console.log(error)
-      })
+    this.props.deleteTask(id);
   }
 
   render() {
 
     const id = this.props.auth.user.id;
 
-    const data = this.state.tasks;
+    const data = this.props.tasks;
 
     const alt = this.state.alt;
 
@@ -580,13 +596,16 @@ class Tasks extends Component {
 
 // export default Tasks;
 Tasks.propTypes = {
+  createTask: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
 const mapStateToProps = state => ({
   auth: state.auth,
-  errors: state.errors
+  errors: state.errors,
+  tasks: state.task.tasks,
 });
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  {createTask, getTasks, deleteTask, updateTask}
 )(Tasks);;

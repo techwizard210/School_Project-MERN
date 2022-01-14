@@ -56,7 +56,7 @@ router.post('/updatetask/:id',(req, res, next) => {
                 if(error){
                     return res.status(400).json(error);
                } else {
-                    res.json(data)
+                    res.json(req.body)
                 }
            })
 })
@@ -486,8 +486,8 @@ router.post('/addtask/',upload.array('imgCollection',6),(req, res, next) => {
         error.httpStatusCode = 400
         return next(error)
       }
-    //const url = req.protocol + '://' + req.get('host')
-    const url = 'http://10.10.10.193:5000';
+    const url = req.protocol + '://' + req.get('host')
+    //const url = 'http://10.10.10.193:5000';
     for (var i = 0; i < req.files.length; i++) {
         reqFiles.push(url + '/public/' + req.files[i].filename)
     }
