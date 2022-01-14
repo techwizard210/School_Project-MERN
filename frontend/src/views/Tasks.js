@@ -323,7 +323,7 @@ class Tasks extends Component {
     if (this.state.file) {
       imgPreview = <img src={this.state.file} alt='' style={{ size: "relative" }} />
     }
-
+    //
     return (
       <div className="animated fadeIn">
 
