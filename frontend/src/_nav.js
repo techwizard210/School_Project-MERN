@@ -73,11 +73,11 @@ export default {
     //       url: '/base/carousels',
     //       icon: 'icon-puzzle',
     //     },
-    //     {
-    //       name: 'Collapses',
-    //       url: '/base/collapses',
-    //       icon: 'icon-puzzle',
-    //     },
+        // {
+        //   name: 'Collapses',
+        //   url: '/base/collapses',
+        //   icon: 'icon-puzzle',
+        // },
     //     {
     //       name: 'Dropdowns',
     //       url: '/base/dropdowns',
