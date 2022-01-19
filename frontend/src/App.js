@@ -15,6 +15,7 @@ import PrivateRoute from "./actions/PrivateRoute";
 import SignUp from './views/Pages/Register';
 import Login from './views/Pages/Login';
 import DefaultLayout from './containers/DefaultLayout';
+
 // Containers
 // const DefaultLayout = React.lazy(() => import('./containers/DefaultLayout'));
 
